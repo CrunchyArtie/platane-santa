@@ -1,0 +1,34 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="loginForm">
+  <mat-card>
+    <mat-card-title>Se connecter</mat-card-title>
+      <mat-card-subtitle><a routerLink="/register">(Pas encore inscrit ?)</a></mat-card-subtitle>
+    <mat-card-content>
+      <div>
+        <app-custom-input
+          [control]="loginForm.controls.email"
+          [errorMessages]="getErrors('email')"
+          [label]="{key: 'email', value: 'Identifiant'}"
+        ></app-custom-input>
+      </div>
+      <div class="passwords">
+        <app-custom-input
+          [control]="loginForm.controls.password"
+          [errorMessages]="getErrors('password')"
+          [label]="{key: 'password', value: 'Mot de passe'}"
+          type="password"
+        ></app-custom-input>
+      </div>
+      <p>Si tu as oublié ton mot de passe, t'es dans la merde.
+       Le développeur n'a pas du tout géré le cas.</p>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <a mat-button routerLink="/">Retour</a>
+      <button mat-raised-button type="submit" color="primary" [disabled]="loginForm.invalid || loginForm.pristine || loading">
+        <mat-icon *ngIf="loading"><mat-spinner diameter="20"></mat-spinner></mat-icon>
+        Se connecter
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</form>
+
+

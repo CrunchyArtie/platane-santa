@@ -1,0 +1,10 @@
+:host {
+  ::ng-deep app-custom-input .mat-form-field {
+    width: 100%;
+  }
+}
+
+mat-card {
+  max-width: 50%;
+  margin: 0 auto 10px auto;
+}

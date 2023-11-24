@@ -1,0 +1,25 @@
+<p>
+  <mat-toolbar color="primary">
+    <span routerLink="/">Secret Santa 2k23 🦌</span>
+    <span class="example-spacer"></span>
+    <app-authenticated *ngIf="loading === false">
+      <button mat-button (click)="logout()">
+        Se déconnecter
+      </button>
+    </app-authenticated>
+    <app-guest *ngIf="loading === false">
+      <a mat-button routerLink="/login">
+        Se connecter
+      </a>
+    </app-guest>
+  </mat-toolbar>
+</p>
+
+<div class="reactive-layout">
+  <div class="side-border"></div>
+  <div class="content">
+    <mat-spinner *ngIf="loading"></mat-spinner>
+    <router-outlet></router-outlet>
+  </div>
+  <div class="side-border"></div>
+</div>

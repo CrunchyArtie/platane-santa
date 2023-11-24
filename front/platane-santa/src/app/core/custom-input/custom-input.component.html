@@ -1,0 +1,19 @@
+<mat-form-field appearance="fill">
+  <mat-label [attr.for]="label.key">{{label.value}}</mat-label>
+  <input [formControlName]="label.key"
+         [id]="label.key"
+         [ngClass]="{ 'invalid': !control.pristine && control.errors }"
+         [placeholder]="label.value"
+         [type]="type === 'hide' ? (shouldHide ? 'password': 'text') : type"
+         matInput>
+  <button (click)="shouldHide = !shouldHide" *ngIf="type === 'hide'" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="shouldHide"
+          mat-icon-button matSuffix>
+    <mat-icon>{{shouldHide ? 'visibility_off' : 'visibility'}}</mat-icon>
+  </button>
+  <ng-container *ngIf="!control.pristine && control.errors">
+    <mat-error *ngFor="let error of getErrors()">
+      {{error | replace:label.key:label.value}}
+    </mat-error>
+  </ng-container>
+  <mat-hint *ngIf="!!hint">{{hint}}</mat-hint>
+</mat-form-field>

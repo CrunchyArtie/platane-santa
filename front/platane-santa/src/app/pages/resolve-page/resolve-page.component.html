@@ -1,0 +1,40 @@
+<!--<div class="box">-->
+<!--  <div class="box-body" [class.active]="active" (mouseenter)="active = true" (click)="active = !active">-->
+<!--    <div class="card">-->
+<!--      <p>{{((target$ | async)?.name | titlecase)}}</p>-->
+<!--    </div>-->
+<!--    <div class="box-lid">-->
+
+<!--      <div class="box-bowtie"></div>-->
+
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+<app-authenticated>
+  <mat-card>
+    <mat-card-header>
+    </mat-card-header>
+    <mat-card-content *ngIf="target$ | async as target">
+      <h1>Ca y est c'est le moment !</h1>
+
+      <p>Voici les deux images qu'a partagé ta cible !</p>
+      <p>Attention, le but n'est pas de deviner à qui tu vas offrir un cadeau, mais de trouver le bon cadeau qui ferait
+        plaisir !</p>
+
+      <div class="image-container" *ngFor="let image of target.images; let index = index">
+        <a [href]="getImagePath(image)" [attr.data-lightbox]="'image-' + index"
+           [attr.data-title]="'image-' + index">
+          <img class="user-image" [src]="getImagePath(image)" alt="image-{{index}}">
+        </a>
+        <a [href]="getImagePath(image)" target="_blank" download="image-{{index}}.jpg">
+          <button mat-raised-button color="primary">
+
+            <mat-icon>file_download</mat-icon>
+            ouvrir dans un nouvel onglet
+          </button>
+        </a>
+      </div>
+
+    </mat-card-content>
+  </mat-card>
+</app-authenticated>

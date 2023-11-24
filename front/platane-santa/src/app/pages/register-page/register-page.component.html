@@ -1,0 +1,68 @@
+<ng-template #tooLate>
+  <mat-card>
+    <mat-card-title>Les inscriptions sont terminées</mat-card-title>
+    <mat-card-content>
+      <p>Les inscriptions sont terminées, tu peux toujours te connecter si tu as déjà un compte.</p>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <a mat-button routerLink="/">Retour</a>
+      <a mat-raised-button color="primary" routerLink="/login">Se connecter</a>
+    </mat-card-actions>
+  </mat-card>
+</ng-template>
+
+<form (ngSubmit)="onSubmit()" [formGroup]="registerForm">
+  <mat-card>
+    <mat-card-title>Tu veux participer au Secret Santa ?</mat-card-title>
+    <mat-card-subtitle>
+      <a routerLink="/login">(Tu as déjà un compte ?)</a>
+    </mat-card-subtitle>
+    <ng-container *ngIf="isRegisterActive$ | async; else tooLate">
+      <mat-card-content>
+      <div>
+        <app-custom-input
+          [control]="registerForm.controls.email"
+          [errorMessages]="getErrors('email')"
+          [label]="{key: 'email', value: 'Identifiant'}"
+          hint="Cet identifiant te permettra de te reconnecter"
+        ></app-custom-input>
+      </div>
+      <div>
+        <app-custom-input
+          [control]="registerForm.controls.name"
+          [errorMessages]="getErrors('name')"
+          [label]="{key: 'name', value: 'Prénom'}"
+          hint="Merci de mettre ton prénom ou surnom qui permettra de te reconnaitre."
+        ></app-custom-input>
+      </div>
+      <div class="passwords">
+        <app-custom-input
+          [control]="registerForm.controls.password"
+          [errorMessages]="getErrors('password')"
+          [label]="{key: 'password', value: 'Mot de passe'}"
+          type="hide"
+        ></app-custom-input>
+      </div>
+      <div>
+        <app-custom-input
+          [control]="registerForm.controls.password_confirmation"
+          [errorMessages]="getErrors('password_confirmation')"
+          [label]="{key: 'password_confirmation', value: 'Confirmation mot de passe'}"
+          type="hide"
+        ></app-custom-input>
+      </div>
+
+
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <a mat-button routerLink="/">Retour</a>
+      <button mat-raised-button color="primary" type="submit" [disabled]="registerForm.invalid || registerForm.pristine || loading">
+        <mat-icon *ngIf="loading"><mat-spinner diameter="20"></mat-spinner></mat-icon>
+        S'enregister
+      </button>
+    </mat-card-actions>
+    </ng-container>
+  </mat-card>
+</form>
+
+
