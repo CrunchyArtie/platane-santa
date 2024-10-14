@@ -13,6 +13,12 @@ use Laravel\Jetstream\Features;
  */
 class UserFactory extends Factory
 {
+
+    /**
+     * Garde en mémoire le nom du dernier utilisateur qui a été créé
+     */
+    private static ?string $lastSantaName = null;
+
     /**
      * Define the model's default state.
      *
@@ -20,17 +26,27 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
-        return [
+        $rawData = [
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'password' => bcrypt('password'),
             'two_factor_secret' => null,
             'two_factor_recovery_codes' => null,
             'remember_token' => Str::random(10),
             'profile_photo_path' => null,
             'current_team_id' => null,
         ];
+
+        // S'il y a un dernier utilisateur qui a été créé, on l'ajoute à l'utilisateur actuel
+        if (self::$lastSantaName !== null) {
+            $rawData['last_santa_name'] = self::$lastSantaName;
+        }
+
+        // On garde en mémoire le nom de l'utilisateur actuel pour le prochain utilisateur
+        self::$lastSantaName = $rawData['name'];
+
+        return $rawData;
     }
 
     /**

@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Api\ImageController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SantasController;
 use Illuminate\Support\Facades\Route;
@@ -30,7 +29,7 @@ Route::middleware([
         Route::patch('/dashboard', 'update')->name('.update');
     });
 
-    if(Parameters::get('is_santa_panel_accessible')) {
+    if(env('IS_SANTA_PANEL_ACCESSIBLE')) {
         Route::controller(SantasController::class)->name('santas')->group(function () {
             Route::get('/santas', 'index');
             Route::get('/shuffle', 'shuffle')->name('.shuffle');

@@ -2,10 +2,10 @@ import {Component, inject, OnInit} from '@angular/core';
 import {AuthenticationService} from '../../services/authentication.service';
 import {mergeMap, Observable} from "rxjs";
 import {IsReadyService} from "../../services/is-ready.service";
-import * as fs from "fs";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
 import {Image} from "../../models/image";
+import {ImageModeService} from "../../services/image-mode.service";
 
 const IMAGE_ENDPOINT = '/images';
 
@@ -18,11 +18,13 @@ export class LandingPageComponent implements OnInit {
 
   private authenticationService = inject(AuthenticationService)
   private isReadyService = inject(IsReadyService)
+  private imageModeService = inject(ImageModeService)
   private httpClient = inject(HttpClient)
 
   public user$ = this.authenticationService.user$;
   public isReady$: Observable<boolean> = this.isReadyService.isReady$;
   public showErrorMessage = false;
+  public isImageMode$ = this.imageModeService.isImageMode$
 
   public onFileSelected(event: any): void {
     const selectedFile = event.target.files[0];

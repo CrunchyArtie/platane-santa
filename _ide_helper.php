@@ -18460,27 +18460,7 @@
      
 }
 
-        namespace App\Facades { 
-            /**
-     * 
-     *
-     */ 
-        class ParametersFacade {
-                    /**
-         * 
-         *
-         * @static 
-         */ 
-        public static function get($key)
-        {
-                        return \App\Helpers\Parameters::get($key);
-        }
-         
-    }
-     
-}
-
-    namespace Barryvdh\Debugbar\Facades { 
+        namespace Barryvdh\Debugbar\Facades { 
             /**
      * 
      *
@@ -24015,7 +23995,6 @@ namespace  {
             class Validator extends \Illuminate\Support\Facades\Validator {}
             class View extends \Illuminate\Support\Facades\View {}
             class Vite extends \Illuminate\Support\Facades\Vite {}
-            class Parameters extends \App\Facades\ParametersFacade {}
             class Debugbar extends \Barryvdh\Debugbar\Facades\Debugbar {}
             class Livewire extends \Livewire\Livewire {}
             class Flare extends \Spatie\LaravelIgnition\Facades\Flare {}

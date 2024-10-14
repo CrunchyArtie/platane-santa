@@ -8,7 +8,7 @@
     <div class="py-5">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg dark:text-gray-200">
-                <a href="{{route('santas.shuffle')}}"
+                <a href="{{route('santas.shuffle', ['show' => request()->query('show')])}}"
                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Make Association</a>
                 @if(request()->query('show'))
                     <a href="{{route('santas')}}"
@@ -35,14 +35,16 @@
                     </tr>
                     @foreach($santas as $user)
                         <tr>
-                            <td class="p-2">{{$user->anonyme_token}}</td>
+                            <td class="p-2">{{$user->name}}</td>
+{{--                            <td class="p-2">{{$user->anonyme_token}}</td>--}}
                             <td class="p-2">
                                 {{$user->images->count()}} / 2
                             </td>
                             <td class="p-2">
                                 @if($user->santa)
                                     @if(request()->query('show'))
-                                        {{$user->santa->anonyme_token}}
+{{--                                        {{$user->santa->anonyme_token}}--}}
+                                        {{$user->santa->name}}
                                     @else
                                         HIDDEN
                                     @endif
@@ -53,7 +55,8 @@
                             <td class="p-2">
                                 @if($user->target)
                                     @if(request()->query('show'))
-                                        {{$user->target->anonyme_token}}
+{{--                                        {{$user->target->anonyme_token}}--}}
+                                        {{$user->target->name}}
                                     @else
                                         HIDDEN
                                     @endif

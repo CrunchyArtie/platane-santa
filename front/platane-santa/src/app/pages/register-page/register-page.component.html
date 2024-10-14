@@ -23,7 +23,7 @@
         <app-custom-input
           [control]="registerForm.controls.email"
           [errorMessages]="getErrors('email')"
-          [label]="{key: 'email', value: 'Identifiant'}"
+          [label]="{key: 'email', value: 'Email'}"
           hint="Cet identifiant te permettra de te reconnecter"
         ></app-custom-input>
       </div>
@@ -49,6 +49,14 @@
           [errorMessages]="getErrors('password_confirmation')"
           [label]="{key: 'password_confirmation', value: 'Confirmation mot de passe'}"
           type="hide"
+        ></app-custom-input>
+      </div>
+      <div>
+        <app-custom-input
+          [control]="registerForm.controls.last_santa_name"
+          [errorMessages]="getErrors('last_santa_name')"
+          [label]="{key: 'last_santa_name', value: 'Ton précédent père noël secret'}"
+          hint="Attention ! Pas celui que tu as eu, mais celui qui t'a offert un cadeau l'année dernière."
         ></app-custom-input>
       </div>
 

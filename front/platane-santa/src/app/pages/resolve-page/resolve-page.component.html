@@ -11,7 +11,7 @@
 <!--  </div>-->
 <!--</div>-->
 <app-authenticated>
-  <mat-card>
+  <mat-card *ngIf="isImageMode$ | async">
     <mat-card-header>
     </mat-card-header>
     <mat-card-content *ngIf="target$ | async as target">
@@ -33,6 +33,24 @@
             ouvrir dans un nouvel onglet
           </button>
         </a>
+      </div>
+
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card *ngIf="!(isImageMode$ | async)">
+    <mat-card-header>
+    </mat-card-header>
+    <mat-card-content>
+      <h1>Ca y est c'est le moment !</h1>
+      <p>Gratte la carte pour découvrir à qui offrir tout plein de cadeaux !</p>
+
+      <div class="sc__wrapper">
+        <!-- scratchcard -->
+        <div id="js--sc--container" #scContainer class="sc__container">
+          <!-- background image insert here by scratchcard-js -->
+          <!-- canvas generate here -->
+        </div>
       </div>
 
     </mat-card-content>

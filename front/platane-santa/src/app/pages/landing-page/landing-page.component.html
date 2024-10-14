@@ -9,10 +9,8 @@
         <p>
           <button color="accent" mat-raised-button routerLink="/register">S'inscrire</button>
         </p>
-        <p>Attention, il va falloir que tu te souviennes du nom de renne que tu as reçu sur la conversation
-          messenger 😉</p>
-        <p>Si tu es déjà inscrit, il va falloir te connecter.
-        </p>
+
+        <p>Si tu es déjà inscrit, il va falloir te connecter.</p>
         <p>
           <button color="primary" mat-raised-button routerLink="/login">Se connecter</button>
         </p>
@@ -27,20 +25,27 @@
     <mat-card-header>
     </mat-card-header>
     <mat-card-content *ngIf="user$ | async as user">
-      <h1>Bienvenue {{user.name | titlecase}}</h1>
+      <h1>Bienvenue {{ user.name | titlecase }}</h1>
       <ng-container *ngIf="isReady$ | async else waitingAllReindeers">
         <p>Bonne nouvelle tous les joueurs sont prêts !</p>
         <img alt="Renne" src="https://media.giphy.com/media/3mJq8i2W3qbe9AkxgL/giphy.gif"/>
         <p>J'imagine que tu es là pour découvrir les images de ta cible ?</p>
-        <p>Tu vas donc devoir offrir un cadeau et ces deux images t'aiderons à influencer ton choix.</p>
-        <p>Attention, garde en tête que ton cadeau doit être en rapport avec les images que tu as reçu.</p>
-        <p> Donc elles ne servent pas à trouver à qui appartiennent ces images.</p>
-        <p class="stick"> Elles ne sont pas non plus forcément représentatives de ce que souhaite ta cible.</p>
-        <p>(Par exemple, s'il a mit une image avec un chat, ça ne veut pas dire qu'il veut un chat !).</p>
-        <p>De plus, il faut aussi se souvenir des contraintes que vous avez défini avec les autres joueurs.</p>
-        <p>
-          <button color="primary" mat-raised-button routerLink="/resolve">Découvrir les images !</button>
-        </p>
+
+        <ng-template #notImageMode>
+            <button color="primary" mat-raised-button routerLink="/resolve">C'est ici !</button>
+        </ng-template>
+
+        <ng-container *ngIf="isImageMode$ | async else notImageMode">
+          <p>Tu vas donc devoir offrir un cadeau et ces deux images t'aiderons à influencer ton choix.</p>
+          <p>Attention, garde en tête que ton cadeau doit être en rapport avec les images que tu as reçu.</p>
+          <p>Donc elles ne servent pas à trouver à qui appartiennent ces images.</p>
+          <p class="stick"> Elles ne sont pas non plus forcément représentatives de ce que souhaite ta cible.</p>
+          <p>(Par exemple, s'il a mit une image avec un chat, ça ne veut pas dire qu'il veut un chat !).</p>
+          <p>De plus, il faut aussi se souvenir des contraintes que vous avez défini avec les autres joueurs.</p>
+          <p>
+            <button color="primary" mat-raised-button routerLink="/resolve">Découvrir les images !</button>
+          </p>
+        </ng-container>
       </ng-container>
 
       <ng-template #waitingAllReindeers>
@@ -49,7 +54,7 @@
         </p>
         <img alt="lol reindeer" src="https://media.giphy.com/media/ZQgzandYzoU5W/giphy.gif">
         <p>
-          A présent on attends que tout le monde soit inscrit et ai envoyé ses deux images.
+          A présent on attends que tout le monde soit inscrit<span *ngIf="isImageMode$ | async"> et ai envoyé ses deux images</span>.
           Pendant ce temps, n'hésite pas a contacter les autres joueurs pour finir de définir les règles (budget minimum
           et maximum par exemple)
         </p>
@@ -58,24 +63,25 @@
           <h2>On a rencontré un petit problème, va falloir envoyer un fichier valable ou alors contacter le développeur
             !</h2>
         </ng-container>
-        <ng-container *ngIf="user.images.length < 2">
-          <p>Il faut envoyer deux images pour pouvoir continuer !</p>
+
+        <ng-container *ngIf="(isImageMode$ | async)">
+          <ng-container *ngIf="user.images.length < 2">
+            <p>Il faut envoyer deux images pour pouvoir continuer !</p>
+          </ng-container>
+          <div class="image-container" *ngFor="let image of userImagesOrNull(user.images); let index = index">
+            <ng-container *ngIf="image">
+              <a [href]="getImagePath(image)" [attr.data-lightbox]="'image-' + index"
+                 [attr.data-title]="'image-' + index"><img class="user-image" [src]="getImagePath(image)"
+                                                           alt="image-{{index}}"></a>
+              <button mat-raised-button color="warn" (click)="deleteImage(image)">Supprimer</button>
+            </ng-container>
+            <ng-container *ngIf="!image">
+              <input hidden (change)="onFileSelected($event)" #fileInput type="file" id="image" name="image"
+                     accept="image/*">
+              <button type="button" mat-raised-button (click)="fileInput.click()">Envoyer une image</button>
+            </ng-container>
+          </div>
         </ng-container>
-
-
-        <div class="image-container" *ngFor="let image of userImagesOrNull(user.images); let index = index">
-          <ng-container *ngIf="image">
-            <a [href]="getImagePath(image)" [attr.data-lightbox]="'image-' + index"
-               [attr.data-title]="'image-' + index"><img class="user-image" [src]="getImagePath(image)"
-                                                         alt="image-{{index}}"></a>
-            <button mat-raised-button color="warn" (click)="deleteImage(image)">Supprimer</button>
-          </ng-container>
-          <ng-container *ngIf="!image">
-            <input hidden (change)="onFileSelected($event)" #fileInput type="file" id="image" name="image"
-                   accept="image/*">
-            <button type="button" mat-raised-button (click)="fileInput.click()">Envoyer une image</button>
-          </ng-container>
-        </div>
 
         <img alt="christmas is coming" src="https://media.giphy.com/media/mATqoqwcLzqNKkLcOR/giphy.gif">
       </ng-template>

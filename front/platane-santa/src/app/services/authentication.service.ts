@@ -19,7 +19,12 @@ export class AuthenticationService {
 
   }
 
-  public register(value: Partial<{ email: string | null, password: string | null, password_confirmation: string | null, reindeer: string | null }>) {
+  public register(value: Partial<{
+    email: string | null,
+    password: string | null,
+    password_confirmation: string | null,
+    last_santa_name: string | null
+  }>) {
     return this.httpClient
       .post<{ user: any; token: string }>(environment.apiBaseUrl + REGISTER_ENDPOINT, value)
       .pipe(map((response: any) => {
@@ -47,7 +52,7 @@ export class AuthenticationService {
 
   public refreshUser$({refreshAuthStatus}: { refreshAuthStatus: boolean } = {refreshAuthStatus: false}) {
     return this.httpClient
-      .get<RawUserData & {target: RawUserData}>(environment.apiBaseUrl + ME_ENDPOINT)
+      .get<RawUserData & { target: RawUserData }>(environment.apiBaseUrl + ME_ENDPOINT)
       .pipe(map(response => {
         this.setUser(response!)
         if (refreshAuthStatus) {
@@ -62,7 +67,7 @@ export class AuthenticationService {
     this.isAuthenticated$.next(false);
   }
 
-  private setUser(responseElement: RawUserData & {target: RawUserData}) {
+  private setUser(responseElement: RawUserData & { target: RawUserData }) {
     this.user$.next(new User(responseElement));
   }
 
@@ -74,9 +79,9 @@ export class AuthenticationService {
     return this.httpClient.get(environment.csrfUrl, {observe: 'response'})
   }
 
-  public isRegisterActive () {
-    return this.httpClient.get<{is_registration_open: boolean}>(environment.apiBaseUrl + '/is_registration_open').pipe(
-      map(response => response?.is_registration_open)
+  public isRegisterActive() {
+    return this.httpClient.get(environment.apiBaseUrl + '/is-registration-open').pipe(
+      map((response: any) => response['is-registration-open'] ?? false)
     );
   }
 

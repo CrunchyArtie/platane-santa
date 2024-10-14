@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Parameter;
+use App\Models\SantaRestriction;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -12,9 +13,8 @@ class DashboardController extends Controller
 
     public function index()
     {
-        $users = User::get();
-        $parameters = Parameter::get();
-        return view('dashboard', compact('users', 'parameters'));
+        $users = User::with(['lastSanta', 'lastTarget'])->get();
+        return view('dashboard', compact('users'));
     }
 
     public function update(Request $request)
@@ -30,12 +30,16 @@ class DashboardController extends Controller
                 }
 
                 $user->save();
-            } elseif ($request->get('action') === 'parameter') {
-                $parameter = Parameter::find($request->get('id'));
+            } elseif ($request->get('action') === 'last_target') {
+                $user = User::find($request->get('id'));
+                $restriction = new SantaRestriction(
+                    [
+                        'santa_id' => $request->last_santa_id,
+                        'user_id' => $user->id
+                    ]
+                );
+                $restriction->save();
 
-                $parameter->value = $request->get('value');
-
-                $parameter->save();
             } else {
                 Log::error('Unknown action: ' . $request->get('action'));
             }

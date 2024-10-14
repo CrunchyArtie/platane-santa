@@ -15,7 +15,7 @@
                     <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    @if(Parameters::get('is_santa_panel_accessible'))
+                    @if(env('IS_SANTA_PANEL_ACCESSIBLE'))
                         <x-nav-link href="{{ route('santas') }}" :active="request()->routeIs('santas')">
                             {{ __('Santas') }}
                         </x-nav-link>

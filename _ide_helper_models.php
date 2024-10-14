@@ -28,31 +28,33 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Image whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Image whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Image whereUserId($value)
+ * @mixin \Eloquent
  */
 	class Image extends \Eloquent {}
 }
 
 namespace App\Models{
 /**
- * App\Models\Parameter
+ * App\Models\SantaRestriction
  *
+ * @property-read \App\Models\User|null $santa
+ * @property-read \App\Models\User $target
+ * @method static \Illuminate\Database\Eloquent\Builder|SantaRestriction newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SantaRestriction newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SantaRestriction query()
+ * @mixin \Eloquent
  * @property int $id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property string $key
- * @property string $type
- * @property string $value
- * @method static \Illuminate\Database\Eloquent\Builder|Parameter newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Parameter newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Parameter query()
- * @method static \Illuminate\Database\Eloquent\Builder|Parameter whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Parameter whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Parameter whereKey($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Parameter whereType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Parameter whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Parameter whereValue($value)
+ * @property int|null $santa_id
+ * @property int|null $user_id
+ * @method static \Illuminate\Database\Eloquent\Builder|SantaRestriction whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SantaRestriction whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SantaRestriction whereSantaId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SantaRestriction whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SantaRestriction whereUserId($value)
  */
-	class Parameter extends \Eloquent {}
+	class SantaRestriction extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -74,10 +76,17 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int|null $santa_id
+ * @property string|null $last_santa_name
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Image> $images
  * @property-read int|null $images_count
+ * @property-read \App\Models\SantaRestriction|null $lastSanta
+ * @property-read \App\Models\SantaRestriction|null $lastTarget
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, User> $oldSantas
+ * @property-read int|null $old_santas_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, User> $oldTargets
+ * @property-read int|null $old_targets_count
  * @property-read string $profile_photo_url
  * @property-read User|null $santa
  * @property-read User|null $target
@@ -93,6 +102,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmailVerifiedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereLastSantaName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereProfilePhotoPath($value)
@@ -102,6 +112,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User whereTwoFactorRecoveryCodes($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereTwoFactorSecret($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 	class User extends \Eloquent {}
 }

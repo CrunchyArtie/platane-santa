@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 
 class SantasController extends Controller
 {
@@ -16,29 +16,40 @@ class SantasController extends Controller
 
     public function shuffle()
     {
-        $anonymousUsers = User::whereNotNull('anonyme_token')->get();
+        $santas = User::with(['lastSanta', 'lastTarget'])
+            ->whereNotNull('anonyme_token')
+            ->orderBy('id')
+            ->get();
 
-        function isShuffleValid($santas, $anonymousUsers)
+        function isShuffleValid(Collection $targets, Collection $santas)
         {
-            foreach ($santas as $key => $santa) {
-                if ($santa->id === $anonymousUsers[$key]->id) {
+            foreach ($targets as $key => $target) {
+                /** @var \App\Models\User $target */
+                /** @var \App\Models\User $santa */
+                $santa = $santas[$key];
+
+                if ($target->id === $santa->id) {
                     return false;
                 }
 
+                // Vérifier si la target n'a pas déjà eu le santa en dernier
+                if ($target->lastSanta !== null && $target->lastSanta->santa->id === $santa->id) {
+                    return false;
+                }
             }
 
             return true;
         }
 
         do {
-            $santas = $anonymousUsers->shuffle();
-        } while (isShuffleValid($santas, $anonymousUsers) === false);
+            $targets = $santas->shuffle();
+        } while (isShuffleValid($targets, $santas) === false);
 
-        foreach ($santas as $key => $santa) {
-            $santa->santa_id = $anonymousUsers[$key]->id;
-            $santa->save();
+        foreach ($targets as $key => $target) {
+            $target->santa_id = $santas[$key]->id;
+            $target->save();
         }
 
-        return redirect()->route('santas');
+        return $this->index();
     }
 }

@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
 import {AuthenticationService} from '../../services/authentication.service';
-import {catchError, of, ReplaySubject} from 'rxjs';
+import {catchError, of} from 'rxjs';
 import {Router} from '@angular/router';
 import {get} from 'lodash-es';
 
@@ -11,12 +11,16 @@ import {get} from 'lodash-es';
   styleUrls: ['./register-page.component.scss']
 })
 export class RegisterPageComponent implements OnInit {
+  private formBuilder = inject(FormBuilder)
+  private authenticationService = inject(AuthenticationService)
+  private router = inject(Router)
 
   public registerForm = this.formBuilder.group({
     email: ['', [Validators.required, Validators.minLength(3)]],
     name: ['', [Validators.required, Validators.minLength(3)]],
     password: ['', [Validators.required]],
-    password_confirmation: ['', [Validators.required]]
+    password_confirmation: ['', [Validators.required]],
+    last_santa_name: ['', [Validators.required, Validators.minLength(3)]]
   });
   public loading = false;
   private genericErrors = {
@@ -25,13 +29,6 @@ export class RegisterPageComponent implements OnInit {
   };
   private backendErrors: { [control: string]: { [error: string]: string } } = {};
   public isRegisterActive$ = this.authenticationService.isRegisterActive();
-
-  constructor(
-    private formBuilder: FormBuilder,
-    private authenticationService: AuthenticationService,
-    private router: Router
-  ) {
-  }
 
   ngOnInit(): void {
     this.authenticationService.checkCsrfToken().subscribe();
