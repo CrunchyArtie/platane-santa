@@ -33,12 +33,14 @@ Route::controller(ImageController::class)->name('images')->group(function () {
 
 
 Route::post('/register', [RegisteredUserController::class, 'store'])
-    ->middleware('guest');
-//    ->name('register');
+    ->middleware('guest')
+    ->name('register');
 
 Route::post('/login', [AuthenticatedSessionController::class, 'store'])
-    ->middleware('guest');
-//    ->name('login');
+    ->middleware('guest')
+    ->name('login');
+
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']);
 
 Route::get('/is-ready', function () {
     return response()->json(['is-ready' => env('ARE_SANTA_READY')]);

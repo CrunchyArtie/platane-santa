@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Parameter;
 use App\Models\SantaRestriction;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -24,7 +23,7 @@ class DashboardController extends Controller
                 $user = User::find($request->get('id'));
 
                 if ($user->anonyme_token === null) {
-                    $user->anonyme_token = $this->getRandomName();
+                    $user->anonyme_token = $this->getRandomName($user->name);
                 } else {
                     $user->anonyme_token = null;
                 }
@@ -49,8 +48,8 @@ class DashboardController extends Controller
 
     }
 
-    private function getRandomName()
+    private function getRandomName($str)
     {
-        return fake()->name();
+        return $str; // fake()->name();
     }
 }

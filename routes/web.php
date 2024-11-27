@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\Auth\WebAuthenticatedSessionController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EnvFileController;
 use App\Http\Controllers\SantasController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,9 +17,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+//Route::get('/', function () {
+//    return view('welcome');
+//});
+
+
+
 
 Route::middleware([
     'auth:sanctum',
@@ -29,6 +34,11 @@ Route::middleware([
         Route::patch('/dashboard', 'update')->name('.update');
     });
 
+    Route::controller(EnvFileController::class)->name('env_file')->group(function () {
+        Route::get('/environment', 'index');
+        Route::patch('/environment', 'update')->name('.update');
+    });
+
     if(env('IS_SANTA_PANEL_ACCESSIBLE')) {
         Route::controller(SantasController::class)->name('santas')->group(function () {
             Route::get('/santas', 'index');
@@ -36,4 +46,13 @@ Route::middleware([
         });
     }
 });
+
+
+Route::post('/login', [WebAuthenticatedSessionController::class, 'store'])
+    ->middleware('guest')
+    ->name('web.login');
+
+Route::post('/logout', [WebAuthenticatedSessionController::class, 'destroy'])
+    ->middleware('auth:sanctum')
+    ->name('web.logout');
 
