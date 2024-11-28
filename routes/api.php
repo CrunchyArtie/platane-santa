@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ImageController;
+use App\Http\Controllers\Api\QuestionController as ApiQuestionController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use Illuminate\Http\Request;
@@ -18,12 +19,16 @@ use Illuminate\Support\Facades\Route;
 */
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
-        return $request->user()->load(['images', 'target.images']);
+        return $request->user()->load(['images', 'target.images', 'questions']);
     });
 
     Route::controller(ImageController::class)->name('images')->group(function () {
         Route::post('/images', 'store');
         Route::delete('/images/{id}', 'destroy');
+    });
+
+    Route::controller(ApiQuestionController::class)->name('questions')->group(function () {
+        Route::post('/questions/{question}/response', 'storeResponse');
     });
 });
 
@@ -42,6 +47,7 @@ Route::post('/login', [AuthenticatedSessionController::class, 'store'])
 
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']);
 
+
 Route::get('/is-ready', function () {
     return response()->json(['is-ready' => env('ARE_SANTA_READY')]);
 });
@@ -56,5 +62,9 @@ Route::get('/is-image-mode-active', function () {
 
 Route::get('/santa-joke-target', function () {
     return response()->json(['santa-joke-target' => env('SANTA_JOKE_TARGET')]);
+});
+
+Route::get('/is-image-and-question-mode-active', function () {
+    return response()->json(['is-image-and-question-mode-active' => env('IS_IMAGE_AND_QUESTION')]);
 });
 

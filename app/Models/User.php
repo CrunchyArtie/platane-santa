@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -116,6 +117,7 @@ class User extends Authenticatable
      */
     protected $appends = [
         'profile_photo_url',
+        'responses',
     ];
 
     public function images()
@@ -169,5 +171,23 @@ class User extends Authenticatable
         return $this->hasOne(SantaRestriction::class, 'user_id')
                     ->latestOfMany()
                     ->with('santa');
+    }
+
+    public function questions()
+    {
+        return $this->belongsToMany(Question::class)->withPivot('response')->withTimestamps();
+    }
+
+    public function responses(): Attribute
+    {
+        return new Attribute(
+            fn() => $this->questions->map(
+                fn($question) => [
+                    'id' => $question->id,
+                    'question' => $question->question,
+                    'response' => $question->pivot->response
+                ]
+            )
+        );
     }
 }

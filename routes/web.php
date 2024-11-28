@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\WebAuthenticatedSessionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EnvFileController;
+use App\Http\Controllers\QuestionController as WebQuestionController;
 use App\Http\Controllers\SantasController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,9 +22,6 @@ use Illuminate\Support\Facades\Route;
 //    return view('welcome');
 //});
 
-
-
-
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
@@ -31,6 +29,7 @@ Route::middleware([
 ])->group(function () {
     Route::controller(DashboardController::class)->name('dashboard')->group(function () {
         Route::get('/dashboard', 'index');
+        Route::get('/dashboard/assign-question', 'assignQuestion')->name('.assign_question');
         Route::patch('/dashboard', 'update')->name('.update');
     });
 
@@ -45,6 +44,8 @@ Route::middleware([
             Route::get('/shuffle', 'shuffle')->name('.shuffle');
         });
     }
+
+    Route::resource('questions', WebQuestionController::class)->only(['index', 'store', 'update', 'destroy']);
 });
 
 

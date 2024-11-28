@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Question;
 use App\Models\SantaRestriction;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -51,5 +52,22 @@ class DashboardController extends Controller
     private function getRandomName($str)
     {
         return $str; // fake()->name();
+    }
+
+    public function assignQuestion(Request $request)
+    {
+        $users = User::all();
+        // detach all questions
+        $users->each(function ($user) {
+            $user->questions()->detach();
+        });
+
+        $questions = Question::all();
+        $shuffledQuestions = $questions->shuffle();
+        $users->each(function ($user, $key) use ($shuffledQuestions) {
+            $user->questions()->attach($shuffledQuestions[$key % count($shuffledQuestions)]);
+        });
+
+        return redirect()->route('dashboard');
     }
 }
