@@ -24,8 +24,8 @@ class AppServiceProvider extends ServiceProvider
 
     private function getSettings()
     {
-        return Setting::all()->mapWithKeys(function ($setting) {
+        return \Schema::hasTable('settings') ? Setting::all()->mapWithKeys(function ($setting) {
             return [$setting->key => $setting->value];
-        });
+        }) : collect();
     }
 }
