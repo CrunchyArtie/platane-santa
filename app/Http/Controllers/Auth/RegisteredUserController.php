@@ -21,11 +21,16 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request)
     {
+        // est que le setting impose le last_santa_name
+        $setting = \App\Models\Setting::where('key', 'is_avoid_last_santa_active')->first();
+
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'last_santa_name' => ['required', 'string', 'max:255'],
+            'last_santa_name' => [
+                $setting->value === 'true' ? 'required' : 'nullable'
+            , 'string', 'max:255'],
         ]);
 
         $user = User::create([

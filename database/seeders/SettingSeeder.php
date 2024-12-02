@@ -20,6 +20,7 @@ class SettingSeeder extends Seeder
             ['key' => 'are_santa_ready', 'value' => 'true'],
             ['key' => 'santa_joke_target', 'value' => ''],
             ['key' => 'is_image_and_question', 'value' => 'false'],
+            ['key' => 'is_avoid_last_santa_active', 'value' => 'false']
         ];
 
         foreach ($settings as $setting) {
