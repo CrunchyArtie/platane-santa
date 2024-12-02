@@ -13,7 +13,7 @@ class AdminSeeder extends Seeder
     public function run(): void
     {
         // Créer le compte admin
-        $admin = \App\Models\User::factory()->create([
+        $admin = \App\Models\User::create([
             'name' => 'Admin',
             'email' => 'admin@' . (string) env('SESSION_DOMAIN'),
             'password' => bcrypt('password'),
