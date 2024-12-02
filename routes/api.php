@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\ImageController;
 use App\Http\Controllers\Api\QuestionController as ApiQuestionController;
+use App\Http\Controllers\Api\SettingController as ApiSettingController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use Illuminate\Http\Request;
@@ -43,28 +44,13 @@ Route::post('/register', [RegisteredUserController::class, 'store'])
 
 Route::post('/login', [AuthenticatedSessionController::class, 'store'])
     ->middleware('guest')
-    ->name('login');
+    ->name('api.login');
 
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']);
 
 
-Route::get('/is-ready', function () {
-    return response()->json(['is-ready' => env('ARE_SANTA_READY')]);
-});
-
-Route::get('/is-registration-open', function () {
-    return response()->json(['is-registration-open' => env('IS_REGISTRATION_OPEN')]);
-});
-
-Route::get('/is-image-mode-active', function () {
-    return response()->json(['is-image-mode-active' => env('IS_IMAGE_MODE_ACTIVE')]);
-});
-
-Route::get('/santa-joke-target', function () {
-    return response()->json(['santa-joke-target' => env('SANTA_JOKE_TARGET')]);
-});
-
-Route::get('/is-image-and-question-mode-active', function () {
-    return response()->json(['is-image-and-question-mode-active' => env('IS_IMAGE_AND_QUESTION')]);
+Route::controller(ApiSettingController::class)->name('settings')->group(function () {
+    Route::get('/settings', 'index');
+    Route::get('/settings/{setting}', 'show');
 });
 

@@ -15,7 +15,7 @@
                     <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    @if(env('IS_SANTA_PANEL_ACCESSIBLE'))
+                    @if($settings['is_santa_panel_accessible'] == "true" ?? false)
                         <x-nav-link href="{{ route('santas') }}" :active="request()->routeIs('santas')">
                             {{ __('Santas') }}
                         </x-nav-link>
@@ -23,8 +23,8 @@
                     <x-nav-link href="{{ route('questions.index')}}" :active="request()->routeIs('questions')">
                         {{ __('Questions') }}
                     </x-nav-link>
-                    <x-nav-link href="{{route('env_file')}}" :active="request()->routeIs('env_file')">
-                        {{ __('Env_file') }}
+                    <x-nav-link href="{{route('settings.index')}}" :active="request()->routeIs('settings')">
+                        {{ __('Settings') }}
                     </x-nav-link>
                 </div>
             </div>

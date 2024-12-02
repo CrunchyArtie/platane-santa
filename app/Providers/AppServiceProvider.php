@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Setting;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -18,6 +19,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        view()->share('settings', $this->getSettings()->toArray());
+    }
+
+    private function getSettings()
+    {
+        return Setting::all()->mapWithKeys(function ($setting) {
+            return [$setting->key => $setting->value];
+        });
     }
 }

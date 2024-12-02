@@ -12,21 +12,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Créer le compte admin
-        $admin = \App\Models\User::factory()->create([
-            'name' => 'Admin',
-            'email' => 'admin@' . (string) env('SESSION_DOMAIN'),
-            'password' => bcrypt('password'),
-        ]);
 
-        // Affiche dans la console que le compte admin avec email et mot de passe a été créé
-        echo 'Admin created with email: ' . $admin->email . ' and password: password' . PHP_EOL;
+        $this->call(AdminSeeder::class);
+        $this->call(SettingSeeder::class);
+        $this->call(QuestionSeeder::class);
 
-         \App\Models\User::factory(4)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        // Si on n'est pas en production, on crée des utilisateurs de test
+        if (env('APP_ENV') !== 'production') {
+            $this->call(UserSeeder::class);
+        }
     }
 }

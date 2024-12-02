@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -26,7 +27,15 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request)
     {
-        $request->authenticate();
+        try {
+            $request->authenticate();
+        } catch (ValidationException $e) {
+            if ($request->expectsJson()) {
+                return response()->json(['error' => 'Invalid credentials'], 422);
+            }
+
+            return redirect('/login')->withErrors(['email' => 'Invalid credentials']);
+        }
 
         $user = $request->user()->load(['images', 'target.images', 'questions']);
         $token = $user->createToken(env('APP_NAME'))->plainTextToken;

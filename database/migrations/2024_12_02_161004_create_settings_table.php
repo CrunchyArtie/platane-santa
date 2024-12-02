@@ -11,14 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('santa_restrictions', function (Blueprint $table) {
+        Schema::create('settings', function (Blueprint $table) {
             $table->id();
+            $table->string('key')->unique();
+            $table->text('value')->nullable();
             $table->timestamps();
-            // column to store the santa to user relationship
-            $table->foreignId('santa_id')->nullable()->constrained('users');
-            $table->foreignId('user_id')->nullable()->constrained('users');
-
-
         });
     }
 
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('santa_restrictions');
+        Schema::dropIfExists('settings');
     }
 };
